@@ -43,9 +43,10 @@ function Game(player1, player2, board) {
         if (gameOver) return;
 
         if (board.setCell(index, currentPlayer.marker)) {
+            updateHTML();
             if (checkWin()) {
                 gameOver = true;
-                alert("Player " + currentPlayer.name + " wins!");
+                alert(currentPlayer.name + " wins!");
             } else {
                 console.log('game still in progress...');
                 switchPlayer();
@@ -112,12 +113,42 @@ const startButton = document.querySelector('#start-button');
 const inputs = document.querySelectorAll('input');
 const squares = document.querySelectorAll('.square');
 
-// start game & assign text inputs
+let gameStarted = false;
+
 startButton.addEventListener('click', function(e){
-    const player1 = Player(inputs[0].value, 'X');
-    const player2 = Player(inputs[1].value, 'O');
-    
-    game = Game(player1, player2, board);
+    if (!gameStarted) {
+        const name1 = inputs[0].value.trim();
+        const name2 = inputs[1].value.trim();
+
+        // input validation
+        if (!name1 || !name2) {
+            alert("Both player names are required!");
+            return;
+        }
+        if (name1 === name2) {
+            alert("Player names must be different!");
+            return;
+        }
+
+        const player1 = Player(name1, 'X');
+        const player2 = Player(name2, 'O');
+        
+        game = Game(player1, player2, board);
+        board.reset();
+        updateHTML();
+
+        startButton.textContent = 'Reset';
+        startButton.style.backgroundColor = '#ff5252';
+        startButton.style.color = 'white';
+        gameStarted = true;
+    } else {
+        // reset the game and board, keep button as 'Reset'
+        board.reset();
+        updateHTML();
+        if (game && game.resetGame) {
+            game.resetGame();
+        }
+    }
 });
 
 Array.from(squares).forEach((square, index) => {
