@@ -1,6 +1,22 @@
 body {
     font-family: 'JetBrains Mono', monospace;
     font-size: 1rem;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.footer {
+    width: 100%;
+    display: grid;
+    place-items: center;
+    height: 60px;
+
+    color: rgb(51, 51, 51);
+    background-color: rgb(236, 236, 236);
 }
 
 .grid-container {
@@ -19,8 +35,17 @@ body {
 .square {
     border: 1px solid black;
     cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 3rem;
+    font-weight: bold;
 }
- /* remove top border from first 3 */
+
+.square:hover {
+    background-color: rgba(0, 0, 255, 0.05);
+}
+
+/* remove top border from first 3 */
 .square:nth-child(-n+3) {
   border-top: none;
 }
@@ -46,11 +71,15 @@ body {
     margin: 0 auto;
     width: 400px;
     display: grid;
+    grid-template-columns: 1fr 1.5fr;
     gap: 1rem;
-    grid-template-columns: 1fr 1fr;
     box-sizing: border-box;
     padding: 1rem;
     align-items: center;
+}
+
+label {
+    grid-column: 1 / 2;
 }
 
 input {
@@ -60,11 +89,17 @@ input {
     background-color: rgb(236, 236, 236);
     outline-offset: -2px;
     height: 1.8rem;
-    max-width: 200px;
     padding: 0 0.5rem;
     box-sizing: border-box;
+
+    width: 100%;
 }
 
 input:focus {
     outline: 2px solid rgb(218, 218, 218);
+}
+
+#start-button {
+    grid-column: span 2;
+    cursor: pointer;
 }

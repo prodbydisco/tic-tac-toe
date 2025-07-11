@@ -1,3 +1,6 @@
+const grid = document.querySelector('.grid-container');
+
+
 function Gameboard() {
     let cells = [null, null, null, null, null, null, null, null, null];
 
@@ -8,6 +11,7 @@ function Gameboard() {
     function setCell(index, marker) {
         if (cells[index] === null) {
             cells[index] = marker;
+            updateHTML();
             console.log(`${marker} placed in cell ${index+1}`);
             return true;
         } else {
@@ -41,7 +45,7 @@ function Game(player1, player2, board) {
         if (board.setCell(index, currentPlayer.marker)) {
             if (checkWin()) {
                 gameOver = true;
-                alert(currentPlayer.name + "wins!");
+                alert("Player " + currentPlayer.name + " wins!");
             } else {
                 console.log('game still in progress...');
                 switchPlayer();
@@ -80,7 +84,7 @@ function Game(player1, player2, board) {
                 winner = true;
             }
         });
-        return winner;board
+        return winner;
     }
 
     function resetGame() {
@@ -92,11 +96,33 @@ function Game(player1, player2, board) {
     return { playTurn, resetGame }
 }
 
-// Initialise game
-const board = Gameboard();
-const player1 = Player('Mark', 'X');
-const player2 = Player('Steve', 'O');
-const game = Game(player1, player2, board);
+function updateHTML() {
+    const boardArray = board.getBoard(); // get cells
 
-game.playTurn(0);
-game.playTurn(0);
+    Array.from(squares).forEach((square, index) => {
+        square.textContent = boardArray[index];
+    });
+}
+
+// DOM/Inititialize Game
+let game;
+const board = Gameboard();
+
+const startButton = document.querySelector('#start-button');
+const inputs = document.querySelectorAll('input');
+const squares = document.querySelectorAll('.square');
+
+// start game & assign text inputs
+startButton.addEventListener('click', function(e){
+    const player1 = Player(inputs[0].value, 'X');
+    const player2 = Player(inputs[1].value, 'O');
+    
+    game = Game(player1, player2, board);
+});
+
+Array.from(squares).forEach((square, index) => {
+    square.addEventListener('click', function(e){
+        e.stopPropagation();
+        game.playTurn(index);
+    });
+});
